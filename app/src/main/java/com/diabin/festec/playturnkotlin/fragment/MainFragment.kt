@@ -49,10 +49,17 @@ class MainFragment : BasisFragment() {
                 val model = response?.body()
                 Toast.makeText(context,"成功",Toast.LENGTH_SHORT).show()
                 Log.d("MainFragment",model.toString())
-                val myArray = mutableListOf(model?.data?.size)
-                var string : ArrayList<String> ?= null
+                val arrayImageUrl:ArrayList<String> = arrayListOf()
                 for (value in model?.data!!) {
                     Log.d("MainFragment---",value.title)
+                    arrayImageUrl.add(value.title)
+                }
+
+                if (arrayImageUrl != null) {
+                    for (ca in arrayImageUrl){
+                        Log.d("MainFragment-+--",ca)
+
+                    }
                 }
 
             }
