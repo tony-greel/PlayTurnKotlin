@@ -12,13 +12,20 @@ import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.diabin.festec.playturnkotlin.R
+import com.diabin.festec.playturnkotlin.api.Api
 import com.diabin.festec.playturnkotlin.basis.BasisFragment
+import com.diabin.festec.playturnkotlin.bean.CarouselBean
+import com.diabin.festec.playturnkotlin.http.RetrofitClient
 import com.diabin.festec.playturnkotlin.tool.PictureLoaderTool
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import com.youth.banner.Transformer
 import com.youth.banner.loader.ImageLoader
 import kotlinx.android.synthetic.main.fragment_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.time.LocalDate
 
 class MainFragment : BasisFragment() {
 
@@ -34,6 +41,29 @@ class MainFragment : BasisFragment() {
     }
 
     private fun initData() {
+
+
+        val call = RetrofitClient.getInstance().getRetrofit(Api.baseUrl).create(Api::class.java).fetch()
+        call.enqueue(object : Callback<CarouselBean> {
+            override fun onResponse(call: Call<CarouselBean>, response: Response<CarouselBean>?) {
+                val model = response?.body()
+                Toast.makeText(context,"成功",Toast.LENGTH_SHORT).show()
+                Log.d("MainFragment",model.toString())
+                val myArray = mutableListOf(model?.data?.size)
+                var string : ArrayList<String> ?= null
+                for (value in model?.data!!) {
+                    Log.d("MainFragment---",value.title)
+                }
+
+            }
+
+            override fun onFailure(call: Call<CarouselBean>, t: Throwable) {
+                Toast.makeText(context,"失败",Toast.LENGTH_SHORT).show()
+
+            }
+
+        })
+
         val arrayImageUrl = arrayListOf<String>("http://image.biaobaiju.com/uploads/20181025/19/1540467434-IhiJNbyXak.jpg",
             "http://gss0.baidu.com/-fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/060828381f30e924ce9f0a854e086e061d95f74f.jpg",
             "http://5b0988e595225.cdn.sohucs.com/q_70,c_zoom,w_640/images/20200105/c5162a9d6f484ce3b8ff464b27f8865f.jpeg")
